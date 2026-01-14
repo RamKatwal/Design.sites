@@ -10,7 +10,7 @@ interface SiteCardProps {
 
 export function SiteCard({ site }: SiteCardProps) {
     return (
-        <div className="group relative aspect-[16/10] overflow-hidden rounded-xl bg-gray-100 transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/5">
+        <div className="group relative aspect-[16/10] overflow-hidden rounded-xl bg-muted transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/5">
             {/* Main Image Link */}
             <Link href={`/sites/${site.slug}`} className="block h-full w-full">
                 <div className="relative h-full w-full">
