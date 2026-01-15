@@ -18,7 +18,7 @@ export default async function SitePage({
     params: Promise<{ slug: string }>;
 }) {
     const resolvedParams = await params;
-    const site = getSiteBySlug(resolvedParams.slug);
+    const site = await getSiteBySlug(resolvedParams.slug);
 
     if (!site) {
         notFound();
@@ -27,7 +27,7 @@ export default async function SitePage({
     return (
         <div className="min-h-screen bg-gray-50 pb-20">
             <Header />
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+            <main className="max-w-7xl mx-auto px-">
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                     {/* Header Section */}
                     <div className="p-8 md:p-10 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-6">

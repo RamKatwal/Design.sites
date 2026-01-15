@@ -11,12 +11,12 @@ export default async function Home({
 }) {
   const resolvedSearchParams = await searchParams;
   const q = typeof resolvedSearchParams.q === 'string' ? resolvedSearchParams.q : undefined;
-  const sites = getSites(q);
+  const sites = await getSites(q);
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       <Header />
-      <main className="w-full px-10 pt-2">
+      <main className="w-full px-4 pt-18">
         <Suspense fallback={<div>Loading...</div>}>
           <SiteGrid sites={sites} />
         </Suspense>
