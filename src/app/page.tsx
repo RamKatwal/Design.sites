@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
-import { Header } from '@/features/sites/components/Header';
-import { SiteGrid } from '@/features/sites/components/SiteGrid';
-import { getSites } from '@/features/sites/lib/getSites';
+import { Header } from '@/features/common/Header';
+import { SiteGrid } from '@/features/common/SiteGrid';
+import { getSites } from '@/features/lib/getSites';
 
 // This is a Server Component
 export default async function Home({
@@ -16,11 +16,7 @@ export default async function Home({
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       <Header />
-      <main className="w-full px-[40px] pt-8">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground mb-2">Inspiration Gallery</h1>
-          <p className="text-muted-foreground">Curated collection of the finest websites on the internet.</p>
-        </div>
+      <main className="w-full px-10 pt-2">
         <Suspense fallback={<div>Loading...</div>}>
           <SiteGrid sites={sites} />
         </Suspense>
