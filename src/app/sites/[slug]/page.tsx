@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { Header } from '@/features/sites/components/Header';
-import { getSiteBySlug } from '@/features/sites/lib/getSites';
+import { Header } from '@/features/common/Header';
+import { getSiteBySlug } from '@/features/lib/getSites';
 import { sites } from '@/data/sites';
 
 // Generate static params for all known sites to optimize build

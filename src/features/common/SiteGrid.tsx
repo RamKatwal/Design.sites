@@ -16,7 +16,7 @@ export function SiteGrid({ sites }: SiteGridProps) {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             {sites.map((site) => (
                 <SiteCard key={site.id} site={site} />
             ))}
