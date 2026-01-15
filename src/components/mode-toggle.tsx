@@ -9,6 +9,21 @@ import { Button } from "@/components/ui/button"
 export function ModeToggle() {
     const { theme, setTheme } = useTheme()
 
+    React.useEffect(() => {
+        function handlekeyDown(event: KeyboardEvent) {
+            if (event.key.toLowerCase() == 'd') {
+                setTheme(theme === "dark" ? "light" : "dark")
+
+            }
+        }
+        document.addEventListener('keydown', handlekeyDown)
+
+        return () => {
+            document.removeEventListener('keydown', handlekeyDown)
+        }
+
+    }, [theme, setTheme])
+
     return (
         <Button
             variant="outline"
