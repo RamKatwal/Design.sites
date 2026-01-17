@@ -93,3 +93,19 @@ export async function getSites(filters: SiteFilters) {
   
   return result
 }
+
+export async function getSiteBySlug(slug: string) {
+  const query = `
+    *[_type == "website" && slug.current == $slug][0] {
+      _id,
+      name,
+      "slug": slug.current,
+      url,
+      "image": coverImage.asset->url,
+      logo,
+      featured
+    }
+  `
+
+  return sanityClient.fetch(query, { slug })
+}
