@@ -16,7 +16,7 @@ export function SiteCard({ site }: SiteCardProps) {
         : '/placeholder.png'
 
     return (
-        <div className="group relative aspect-[16/10] overflow-hidden rounded-sm bg-muted transition-all duration-300 shadow-xs hover:shadow-xl hover:shadow-blue-900/5">
+        <div className="group relative aspect-[16/10] overflow-hidden rounded-sm bg-muted transition-all duration-300 shadow-xl shadow-blue-900/5 lg:shadow-xs lg:hover:shadow-xl lg:hover:shadow-blue-900/5">
 
             {/* Card → Detail page */}
             <Link href={`/site/${site.slug}`} className="block h-full w-full">
@@ -25,14 +25,14 @@ export function SiteCard({ site }: SiteCardProps) {
                         src={imageUrl}
                         alt={site.name}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500 scale-105 lg:scale-100 lg:group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 </div>
             </Link>
 
-            {/* Hover Overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {/* Hover Overlay - visible by default on mobile/tablet, hover only on desktop */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100 lg:opacity-0 transition-opacity duration-300 lg:group-hover:opacity-100">
                 <div className="absolute bottom-0 left-0 right-0 p-2 flex items-end justify-between pointer-events-auto">
                     <div>
                         <h3 className="text-xs font-semibold text-white tracking-wide">
