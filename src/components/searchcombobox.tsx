@@ -1,8 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { sanityClient } from "@/sanity/client"
-import { searchDataQuery } from "@/sanity/queries"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Kbd } from "@/components/ui/kbd"   
@@ -21,6 +19,12 @@ type item = {
   slug: string
 }
 
+type SearchData = {
+  categories: item[]
+  fonts: item[]
+  styles: item[]
+}
+
 export function Searchcombobox() {
 
  
@@ -29,6 +33,8 @@ export function Searchcombobox() {
   const [categories, setCategories] = React.useState<item[]>([])
   const [fonts, setFonts] = React.useState<item[]>([])
   const [styles, setStyles] = React.useState<item[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
 
 
   // 🔑 Keyboard shortcut: S
@@ -56,13 +62,32 @@ export function Searchcombobox() {
     return () => document.removeEventListener("keydown", down)
   }, [open])
 
-  // 📦 Fetch categories from Sanity
+  // 📦 Fetch categories, fonts, and styles from API route
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await sanityClient.fetch(searchDataQuery)
-      setCategories(data.categories)
-      setFonts(data.fonts)
-      setStyles(data.styles)
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await fetch('/api/search-data')
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch: ${response.statusText}`)
+        }
+        
+        const data: SearchData = await response.json()
+        setCategories(data.categories || [])
+        setFonts(data.fonts || [])
+        setStyles(data.styles || [])
+      } catch (err) {
+        console.error('Error fetching search data:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load data')
+        // Set empty arrays on error to prevent UI issues
+        setCategories([])
+        setFonts([])
+        setStyles([])
+      } finally {
+        setLoading(false)
+      }
     }
 
     fetchData()
@@ -107,36 +132,66 @@ export function Searchcombobox() {
             </div>
 
             <CommandList>
-                <CommandEmpty>No results found.</CommandEmpty>
+                {loading ? (
+                    <div className="p-4 text-center text-sm text-muted-foreground">
+                        Loading...
+                    </div>
+                ) : error ? (
+                    <div className="p-4 text-center text-sm text-destructive">
+                        {error}
+                    </div>
+                ) : (
+                    <>
+                        <CommandEmpty>No results found.</CommandEmpty>
 
-                {activeTab === "category" && (
-                    <CommandGroup heading="Categories">
-                    {categories.map((item) => (
-                        <CommandItem key={item._id}>
-                        {item.name}
-                        </CommandItem>
-                    ))}
-                    </CommandGroup>
-                )}
+                        {activeTab === "category" && (
+                            <CommandGroup heading="Categories">
+                            {categories.length > 0 ? (
+                                categories.map((item) => (
+                                    <CommandItem key={item._id}>
+                                    {item.name}
+                                    </CommandItem>
+                                ))
+                            ) : (
+                                <div className="p-4 text-center text-sm text-muted-foreground">
+                                    No categories found
+                                </div>
+                            )}
+                            </CommandGroup>
+                        )}
 
-                {activeTab === "font" && (
-                    <CommandGroup heading="Fonts">
-                    {fonts.map((item) => (
-                        <CommandItem key={item._id}>
-                        {item.name}
-                        </CommandItem>
-                    ))}
-                    </CommandGroup>
-                )}
+                        {activeTab === "font" && (
+                            <CommandGroup heading="Fonts">
+                            {fonts.length > 0 ? (
+                                fonts.map((item) => (
+                                    <CommandItem key={item._id}>
+                                    {item.name}
+                                    </CommandItem>
+                                ))
+                            ) : (
+                                <div className="p-4 text-center text-sm text-muted-foreground">
+                                    No fonts found
+                                </div>
+                            )}
+                            </CommandGroup>
+                        )}
 
-                {activeTab === "style" && (
-                    <CommandGroup heading="Styles">
-                    {styles.map((item) => (
-                        <CommandItem key={item._id}>
-                        {item.name}
-                        </CommandItem>
-                    ))}
-                    </CommandGroup>
+                        {activeTab === "style" && (
+                            <CommandGroup heading="Styles">
+                            {styles.length > 0 ? (
+                                styles.map((item) => (
+                                    <CommandItem key={item._id}>
+                                    {item.name}
+                                    </CommandItem>
+                                ))
+                            ) : (
+                                <div className="p-4 text-center text-sm text-muted-foreground">
+                                    No styles found
+                                </div>
+                            )}
+                            </CommandGroup>
+                        )}
+                    </>
                 )}
                 </CommandList>
 

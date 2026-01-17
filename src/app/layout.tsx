@@ -14,10 +14,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
+
 export const metadata: Metadata = {
-  title: "Design.Sites - Inspiration Gallery",
-  description: "Curated collection of the finest websites.",
-};
+  icons: {
+    icon: [
+      { url: '/thumbs/Designdotweb logo.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+}
+
 
 export default function RootLayout({
   children,
