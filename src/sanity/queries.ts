@@ -20,3 +20,24 @@ export const websitesQuery = `
     }
   }
 `
+
+export const searchDataQuery = `
+{
+  "categories": *[_type == "category"]{
+    _id,
+    name,
+    "slug": slug.current
+  },
+  "fonts": *[_type == "font"]{
+    _id,
+    name,
+    "slug": slug.current
+  },
+  "styles": *[_type == "style"]{
+    _id,
+    name,
+    "slug": slug.current
+  }
+}
+`
+

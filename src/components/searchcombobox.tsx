@@ -1,116 +1,146 @@
 "use client"
 
 import * as React from "react"
-import { Check, ChevronsUpDown, Search } from "lucide-react"
-
+import { sanityClient } from "@/sanity/client"
+import { searchDataQuery } from "@/sanity/queries"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { Kbd } from "@/components/ui/kbd"   
 import {
-    Calculator,
-    Calendar,
-    CreditCard,
-    Settings,
-    Smile,
-    User,
-} from "lucide-react"
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-    CommandShortcut,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
 
-const frameworks = [
-    {
-        value: "next.js",
-        label: "Next.js",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
+type item = {
+  _id: string
+  name: string
+  slug: string
+}
 
 export function Searchcombobox() {
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
 
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full md:w-[400px] justify-between"
+ 
+  const [open, setOpen] = React.useState(false)
+  const [activeTab, setActiveTab] = React.useState<"category" | "font" | "style">("category")
+  const [categories, setCategories] = React.useState<item[]>([])
+  const [fonts, setFonts] = React.useState<item[]>([])
+  const [styles, setStyles] = React.useState<item[]>([])
+
+
+  // 🔑 Keyboard shortcut: S
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      // Don't trigger if user is typing in an input field
+      const target = e.target as HTMLElement
+      const isInput = target.tagName === "INPUT" || 
+                      target.tagName === "TEXTAREA" || 
+                      target.isContentEditable ||
+                      target.closest("input") ||
+                      target.closest("textarea")
+      
+      // Don't trigger if dialog is already open
+      if (open) return
+      
+      // Only trigger if not typing in input and key is 's' without modifiers
+      if (e.key.toLowerCase() === "s" && !e.ctrlKey && !e.metaKey && !isInput) {
+        e.preventDefault()
+        setOpen(true)
+      }
+    }
+
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [open])
+
+  // 📦 Fetch categories from Sanity
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await sanityClient.fetch(searchDataQuery)
+      setCategories(data.categories)
+      setFonts(data.fonts)
+      setStyles(data.styles)
+    }
+
+    fetchData()
+  }, [])
+
+  return (
+    <>
+      <Button
+        variant="outline"
+        role="combobox"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+        className="w-full md:w-[400px] justify-between"
+      >
+        <span className="text-sm">Search</span>
+        <Kbd className="opacity-50">S</Kbd>
+      </Button>
+
+      <CommandDialog 
+        open={open} 
+        onOpenChange={setOpen}
+        className="max-w-[600px]"
+      >
+        <CommandInput placeholder="Type a keyword or search..." />
+
+        {/* Tabs (Category only for now) */}
+        <div className="flex h-10 items-center gap-2 border-b px-3">
+            {["category", "font", "style"].map((tab) => (
+                <button
+                key={tab}
+                onClick={() => setActiveTab(tab as any)}
+                className={cn(
+                    "rounded-sm px-3 py-1.5 text-sm transition-colors capitalize",
+                    activeTab === tab
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                )}
                 >
-                    {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
-                        : "Search"}
-                    <Search className="opacity-50" />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] md:w-[400px] p-0">
-                <Command className="rounded-lg border shadow-md md:min-w-[450px]">
-                    <CommandInput placeholder="Type a command or search..." />
-                    <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
-                        <CommandGroup heading="Suggestions">
-                            <CommandItem>
-                                <Calendar />
-                                <span>Calendar</span>
-                            </CommandItem>
-                            <CommandItem>
-                                <Smile />
-                                <span>Search Emoji</span>
-                            </CommandItem>
-                            <CommandItem disabled>
-                                <Calculator />
-                                <span>Calculator</span>
-                            </CommandItem>
-                        </CommandGroup>
-                        <CommandSeparator />
-                        <CommandGroup heading="Settings">
-                            <CommandItem>
-                                <User />
-                                <span>Profile</span>
-                                <CommandShortcut>⌘P</CommandShortcut>
-                            </CommandItem>
-                            <CommandItem>
-                                <CreditCard />
-                                <span>Billing</span>
-                                <CommandShortcut>⌘B</CommandShortcut>
-                            </CommandItem>
-                            <CommandItem>
-                                <Settings />
-                                <span>Settings</span>
-                                <CommandShortcut>⌘S</CommandShortcut>
-                            </CommandItem>
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
-    )
+                {tab}
+                </button>
+            ))}
+            </div>
+
+            <CommandList>
+                <CommandEmpty>No results found.</CommandEmpty>
+
+                {activeTab === "category" && (
+                    <CommandGroup heading="Categories">
+                    {categories.map((item) => (
+                        <CommandItem key={item._id}>
+                        {item.name}
+                        </CommandItem>
+                    ))}
+                    </CommandGroup>
+                )}
+
+                {activeTab === "font" && (
+                    <CommandGroup heading="Fonts">
+                    {fonts.map((item) => (
+                        <CommandItem key={item._id}>
+                        {item.name}
+                        </CommandItem>
+                    ))}
+                    </CommandGroup>
+                )}
+
+                {activeTab === "style" && (
+                    <CommandGroup heading="Styles">
+                    {styles.map((item) => (
+                        <CommandItem key={item._id}>
+                        {item.name}
+                        </CommandItem>
+                    ))}
+                    </CommandGroup>
+                )}
+                </CommandList>
+
+      </CommandDialog>
+    </>
+  )
 }
