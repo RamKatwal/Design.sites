@@ -26,17 +26,20 @@ export const searchDataQuery = `
   "categories": *[_type == "category"]{
     _id,
     name,
-    "slug": slug.current
+    "slug": slug.current,
+    "count": count(*[_type == "website" && references(^._id)])
   },
   "fonts": *[_type == "font"]{
     _id,
     name,
-    "slug": slug.current
+    "slug": slug.current,
+    "count": count(*[_type == "website" && references(^._id)])
   },
   "styles": *[_type == "style"]{
     _id,
     name,
-    "slug": slug.current
+    "slug": slug.current,
+    "count": count(*[_type == "website" && references(^._id)])
   }
 }
 `
