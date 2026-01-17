@@ -12,6 +12,8 @@ export default function SearchInput() {
                 aria-hidden="true"
             />
 
+
+
             {/* Input field */}
             <Input
                 type="search"

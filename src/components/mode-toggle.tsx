@@ -11,9 +11,18 @@ export function ModeToggle() {
 
     React.useEffect(() => {
         function handlekeyDown(event: KeyboardEvent) {
-            if (event.key.toLowerCase() == 'd') {
+            // Don't trigger if user is typing in an input field
+            const target = event.target as HTMLElement
+            const isInput = target.tagName === "INPUT" || 
+                            target.tagName === "TEXTAREA" || 
+                            target.isContentEditable ||
+                            target.closest("input") ||
+                            target.closest("textarea")
+            
+            // Only trigger if not typing in input and key is 'd' without modifiers
+            if (event.key.toLowerCase() === 'd' && !event.ctrlKey && !event.metaKey && !isInput) {
+                event.preventDefault()
                 setTheme(theme === "dark" ? "light" : "dark")
-
             }
         }
         document.addEventListener('keydown', handlekeyDown)
