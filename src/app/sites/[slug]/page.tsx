@@ -8,11 +8,12 @@ import { MetadataTags } from '@/features/common/MetadataTags'
 import { Gallery } from '@/features/common/Gallery'
 import { IframePreview } from '@/features/common/IframePreview'
 import type { Metadata } from 'next'
+import type { Site } from '@/features/types'
 
 // Generate static params for all sites
 export async function generateStaticParams() {
     const sites = await getSites()
-    return sites.map((site) => ({
+    return sites.map((site: Site) => ({
         slug: site.slug,
     }))
 }
@@ -66,7 +67,7 @@ export default async function SitePage({
     }
 
     return (
-        <div className=" h-fullmin-h-screen bg-background">
+        <div className="min-h-screen bg-background">
             <Header />
             <main className="h-[calc(100vh-3.5rem)] mt-10 flex flex-col lg:flex-row">
                 {/* Left Panel - Fixed/Sticky Info */}
