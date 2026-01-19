@@ -78,9 +78,17 @@ export async function getSiteBySlug(slug: string) {
       name,
       "slug": slug.current,
       url,
-      "image": coverImage.asset->url,
+      coverImage,
       logo,
-      featured
+      featured,
+      addedDate,
+      category->{ name, "slug": slug.current },
+      styles[]->{ name, "slug": slug.current },
+      fonts[]->{ name, "slug": slug.current },
+      sections[]{
+        sectionType->{ name },
+        image
+      }
     }
   `
 

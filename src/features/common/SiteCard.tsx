@@ -19,7 +19,7 @@ export function SiteCard({ site }: SiteCardProps) {
         <div className="group relative aspect-[16/10] overflow-hidden rounded-sm bg-muted transition-all duration-300 shadow-xl shadow-blue-900/5 lg:shadow-xs lg:hover:shadow-xl lg:hover:shadow-blue-900/5">
 
             {/* Card → Detail page */}
-            <Link href={`/site/${site.slug}`} className="block h-full w-full">
+            <Link href={`/sites/${site.slug}`} className="block h-full w-full">
                 <div className="relative h-full w-full">
                     <Image
                         src={imageUrl}
