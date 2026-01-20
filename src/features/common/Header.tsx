@@ -5,6 +5,7 @@ import { Suspense, useEffect, useState, useRef } from 'react';
 import { ModeToggle } from '@/components/mode-toggle';
 import { Searchcombobox } from '@/components/searchcombobox';
 import { cn } from '@/lib/utils';
+import { AuthButton } from '@/components/auth-button';
 
 export function Header() {
     const [isVisible, setIsVisible] = useState(true);
@@ -51,8 +52,9 @@ export function Header() {
                         <Searchcombobox />
                     </Suspense>
                 </div>
-                <div className="shrink-0">
+                <div className="shrink-0 flex items-center gap-2">
                     <ModeToggle />
+                    <AuthButton />
                 </div>
             </div>
         </header>
