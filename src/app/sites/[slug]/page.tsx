@@ -10,6 +10,8 @@ import { IframePreview } from '@/features/common/IframePreview'
 import type { Metadata } from 'next'
 import type { Site } from '@/features/types'
 
+import { BookmarkButton } from '@/components/bookmark/BookmarkButton'
+
 // Generate static params for all sites
 export async function generateStaticParams() {
     const sites = await getSites()

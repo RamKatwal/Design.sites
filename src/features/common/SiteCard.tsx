@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { Site } from '../types'
 import { urlFor } from '@/sanity/image'
+import { BookmarkButton } from '@/components/bookmark/BookmarkButton'
 
 interface SiteCardProps {
     site: Site
@@ -43,17 +44,21 @@ export function SiteCard({ site }: SiteCardProps) {
                         </p>
                     </div>
 
-                    {/* External link */}
-                    <a
-                        href={site.url ?? '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white hover:text-black transition-colors"
-                        title="Open website"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <ArrowUpRight className="h-3 w-3" />
-                    </a>
+                    <div className="flex items-center gap-2">
+                        <BookmarkButton websiteId={site._id} className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white hover:text-black transition-colors" />
+
+                        {/* External link */}
+                        <a
+                            href={site.url ?? '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white hover:text-black transition-colors"
+                            title="Open website"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <ArrowUpRight className="h-3 w-3" />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

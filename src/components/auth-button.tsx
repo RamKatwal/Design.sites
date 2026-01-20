@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { LogIn, LogOut, User as UserIcon } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +61,7 @@ export function AuthButton() {
 
     if (!user) {
         return (
-            <Button onClick={handleLogin} variant="default" size="sm">
+            <Button onClick={handleLogin} variant="default" size="sm" className="cursor-pointer">
                 <LogIn className="w-4 h-4 mr-2" />
                 Log in
             </Button>
@@ -70,7 +71,7 @@ export function AuthButton() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full p-0 overflow-hidden">
+                <Button variant="ghost" size="sm" className="relative h-8 w-8 rounded-full p-0 overflow-hidden cursor-pointer">
                     {user.user_metadata.avatar_url ? (
                         <img
                             src={user.user_metadata.avatar_url}
@@ -91,6 +92,13 @@ export function AuthButton() {
                         </p>
                     </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                    <Link href="/bookmarks" className="cursor-pointer w-full flex items-center">
+                        <span className="w-4 h-4 mr-2 flex items-center justify-center">📌</span>
+                        Bookmarks
+                    </Link>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                     <LogOut className="w-4 h-4 mr-2" />

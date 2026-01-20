@@ -3,6 +3,7 @@ import { ArrowUpRight, Calendar } from 'lucide-react'
 import { Site } from '../types'
 import { urlFor } from '@/sanity/image'
 import { Button } from '@/components/ui/button'
+import { DetailBookmarkButton } from '@/components/bookmark/DetailBookmarkButton'
 
 interface SiteInfoProps {
     site: Site
@@ -58,22 +59,25 @@ export function SiteInfo({ site }: SiteInfoProps) {
             )}
 
             {/* Visit Site CTA */}
-            {site.url && (
-                <Button
-                    asChild
-                    size="lg"
-                    className="w-full"
-                >
-                    <a
-                        href={site.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+            <div className="flex flex-col gap-3 w-full">
+                {site.url && (
+                    <Button
+                        asChild
+                        size="lg"
+                        className="w-full"
                     >
-                        Visit Site
-                        <ArrowUpRight className="h-4 w-4 ml-2" />
-                    </a>
-                </Button>
-            )}
+                        <a
+                            href={site.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Visit Site
+                            <ArrowUpRight className="h-4 w-4 ml-2" />
+                        </a>
+                    </Button>
+                )}
+                <DetailBookmarkButton websiteId={site._id} />
+            </div>
         </div>
     )
 }
