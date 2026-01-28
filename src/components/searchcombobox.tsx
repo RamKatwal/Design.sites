@@ -27,9 +27,10 @@ type SearchData = {
   categories: item[]
   fonts: item[]
   styles: item[]
+  sectionTypes: item[]
 }
 
-type FilterType = "category" | "font" | "style"
+type FilterType = "category" | "font" | "style" | "section"
 
 export function Searchcombobox() {
   const [open, setOpen] = React.useState(false)
@@ -37,6 +38,7 @@ export function Searchcombobox() {
   const [categories, setCategories] = React.useState<item[]>([])
   const [fonts, setFonts] = React.useState<item[]>([])
   const [styles, setStyles] = React.useState<item[]>([])
+  const [sectionTypes, setSectionTypes] = React.useState<item[]>([])
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
   const router = useRouter()
@@ -56,11 +58,15 @@ export function Searchcombobox() {
     () => searchParams.getAll("style"),
     [searchParams]
   )
+  const selectedSections = React.useMemo(
+    () => searchParams.getAll("section"),
+    [searchParams]
+  )
 
   // Get all selected items with their names
   const getSelectedItems = (type: FilterType): item[] => {
-    const selected = type === "category" ? selectedCategories : type === "font" ? selectedFonts : selectedStyles
-    const items = type === "category" ? categories : type === "font" ? fonts : styles
+    const selected = type === "category" ? selectedCategories : type === "font" ? selectedFonts : type === "style" ? selectedStyles : selectedSections
+    const items = type === "category" ? categories : type === "font" ? fonts : type === "style" ? styles : sectionTypes
     return items.filter((item) => selected.includes(item.slug))
   }
 
@@ -69,14 +75,15 @@ export function Searchcombobox() {
       ...getSelectedItems("category"),
       ...getSelectedItems("font"),
       ...getSelectedItems("style"),
+      ...getSelectedItems("section"),
     ]
-  }, [selectedCategories, selectedFonts, selectedStyles, categories, fonts, styles])
+  }, [selectedCategories, selectedFonts, selectedStyles, selectedSections, categories, fonts, styles, sectionTypes])
 
   // Toggle filter selection
   function toggleFilter(type: FilterType, slug: string) {
     const params = new URLSearchParams(searchParams.toString())
     const currentValues = params.getAll(type)
-    
+
     if (currentValues.includes(slug)) {
       // Remove if already selected
       params.delete(type)
@@ -95,7 +102,7 @@ export function Searchcombobox() {
   function removeFilter(type: FilterType, slug: string) {
     const params = new URLSearchParams(searchParams.toString())
     const currentValues = params.getAll(type).filter((v) => v !== slug)
-    
+
     params.delete(type)
     currentValues.forEach((v) => params.append(type, v))
 
@@ -110,6 +117,7 @@ export function Searchcombobox() {
     params.delete("category")
     params.delete("font")
     params.delete("style")
+    params.delete("section")
 
     startTransition(() => {
       router.replace(`/?${params.toString()}`)
@@ -118,7 +126,7 @@ export function Searchcombobox() {
 
   // Check if item is selected
   function isSelected(type: FilterType, slug: string): boolean {
-    const selected = type === "category" ? selectedCategories : type === "font" ? selectedFonts : selectedStyles
+    const selected = type === "category" ? selectedCategories : type === "font" ? selectedFonts : type === "style" ? selectedStyles : selectedSections
     return selected.includes(slug)
   }
 
@@ -161,12 +169,14 @@ export function Searchcombobox() {
         setCategories(data.categories || [])
         setFonts(data.fonts || [])
         setStyles(data.styles || [])
+        setSectionTypes(data.sectionTypes || [])
       } catch (err) {
         console.error("Error fetching search data:", err)
         setError(err instanceof Error ? err.message : "Failed to load data")
         setCategories([])
         setFonts([])
         setStyles([])
+        setSectionTypes([])
       } finally {
         setLoading(false)
       }
@@ -183,6 +193,8 @@ export function Searchcombobox() {
         return fonts
       case "style":
         return styles
+      case "section":
+        return sectionTypes
     }
   }
 
@@ -194,6 +206,8 @@ export function Searchcombobox() {
         return "Fonts"
       case "style":
         return "Styles"
+      case "section":
+        return "Sections"
     }
   }
 
@@ -220,8 +234,10 @@ export function Searchcombobox() {
               const type = selectedCategories.includes(item.slug)
                 ? "category"
                 : selectedFonts.includes(item.slug)
-                ? "font"
-                : "style"
+                  ? "font"
+                  : selectedStyles.includes(item.slug)
+                    ? "style"
+                    : "section"
               return (
                 <div
                   key={`${type}-${item.slug}`}
@@ -245,7 +261,7 @@ export function Searchcombobox() {
 
         {/* Tabs */}
         <div className="flex h-10 items-center gap-2 border-b px-3">
-          {(["category", "font", "style"] as FilterType[]).map((tab) => (
+          {(["category", "font", "style", "section"] as FilterType[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

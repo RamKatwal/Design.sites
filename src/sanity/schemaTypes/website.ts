@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export const website = defineType({
   name: 'website',
@@ -90,11 +90,18 @@ export const website = defineType({
               type: 'image',
               options: { hotspot: true },
               validation: Rule => Rule.required()
+            }),
+
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
             })
           ],
           preview: {
             select: {
               title: 'sectionType.name',
+              subtitle: 'label',
               media: 'image'
             }
           }
