@@ -35,13 +35,13 @@ export async function getSites(filters: SiteFilters = {}) {
 
   if (font.length > 0) {
     conditions.push(`
-      count(fonts[]->slug.current[@ in $fonts]) > 0
+      count((fonts[]->)[slug.current in $fonts]) > 0
     `)
   }
 
   if (style.length > 0) {
     conditions.push(`
-      count(styles[]->slug.current[@ in $styles]) > 0
+      count((styles[]->)[slug.current in $styles]) > 0
     `)
   }
 

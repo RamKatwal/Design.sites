@@ -38,9 +38,22 @@ export async function getSections(filters: SectionFilters = {}) {
 
     // However, GROQ queries return documents. We can return an array of objects constructed from the document data.
 
+    // Treat "null", "all", or empty as no section filter
+    const effectiveSectionSlug =
+        sectionSlug && sectionSlug !== "null" && sectionSlug !== "all"
+            ? sectionSlug
+            : undefined
+
+    // Filter by section type: param can be slug or _id (for types without slug in Sanity)
+    const sectionMatch =
+        effectiveSectionSlug
+            ? `(sectionType->slug.current == $sectionSlug || sectionType->_id == $sectionSlug)`
+            : "true"
+
     let sectionFilter = "true"
-    if (sectionSlug && sectionSlug !== "all") {
-        sectionFilter = `sectionType->slug.current == $sectionSlug`
+    if (effectiveSectionSlug) {
+        sectionFilter = sectionMatch
+        conditions.push(`count((sections[])[${sectionMatch}]) > 0`)
     }
 
     const query = `
@@ -62,7 +75,7 @@ export async function getSections(filters: SectionFilters = {}) {
 
     const params = {
         q: q ? `*${q}*` : undefined,
-        sectionSlug
+        sectionSlug: effectiveSectionSlug
     }
 
     const websites = await sanityClient.fetch(query, params)
