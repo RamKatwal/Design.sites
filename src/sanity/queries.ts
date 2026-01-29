@@ -40,6 +40,12 @@ export const searchDataQuery = `
     name,
     "slug": slug.current,
     "count": count(*[_type == "website" && references(^._id)])
+  },
+  "sectionTypes": *[_type == "section"]{
+    _id,
+    name,
+    "slug": slug.current,
+    "count": count(*[_type == "website" && references(^._id)])
   }
 }
 `

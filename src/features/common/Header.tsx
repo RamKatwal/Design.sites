@@ -49,6 +49,12 @@ export function Header() {
                     >
                         Design.Web
                     </Link>
+                    <Link
+                        href="/sections"
+                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        Sections
+                    </Link>
                 </div>
                 <div className="flex flex-1 justify-center px-2 md:px-4 max-w-md mx-auto">
                     <Suspense>
