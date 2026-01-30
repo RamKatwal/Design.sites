@@ -55,6 +55,12 @@ export function Header() {
                     >
                         Sections
                     </Link>
+                    <Link
+                        href="/blogs"
+                        className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        Blogs
+                    </Link>
                 </div>
                 <div className="flex flex-1 justify-center px-2 md:px-4 max-w-md mx-auto">
                     <Suspense>
