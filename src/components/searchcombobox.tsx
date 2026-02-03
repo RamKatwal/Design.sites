@@ -6,7 +6,7 @@ import { useTransition } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Kbd } from "@/components/ui/kbd"
-import { X } from "lucide-react"
+import { X, Search as SearchIcon } from "lucide-react"
 import {
   CommandDialog,
   CommandEmpty,
@@ -265,10 +265,12 @@ export function Searchcombobox() {
         role="combobox"
         aria-expanded={open}
         onClick={() => setOpen(true)}
-        className="w-full md:w-[400px] justify-between"
+        className="size-9 shrink-0 md:size-auto md:w-[400px] md:justify-between md:px-3"
+        aria-label={isSectionsPage ? "Sections" : "Search"}
       >
-        <span className="text-sm">{isSectionsPage ? "Sections" : "Search"}</span>
-        <Kbd className="opacity-50">S</Kbd>
+        <SearchIcon className="size-4 md:hidden" />
+        <span className="hidden md:inline text-sm">{isSectionsPage ? "Sections" : "Search"}</span>
+        <Kbd className="hidden md:inline-flex opacity-50">S</Kbd>
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen} className="max-w-[600px]">
