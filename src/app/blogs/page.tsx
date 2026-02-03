@@ -11,13 +11,13 @@ export default async function BlogsPage() {
         <div className="min-h-screen bg-background text-foreground pb-20">
             <Header />
 
-            <main className="w-full px-4 pt-20 max-w-[2000px] mx-auto">
-                <div className="mb-6">
+            <main className="w-full px-4 pt-18 max-w-[2000px] mx-auto">
+                {/* <div className="mb-6">
                     <h1 className="text-2xl font-bold tracking-tight">Blogs</h1>
                     <p className="text-muted-foreground mt-1">
                         {blogs.length} result{blogs.length === 1 ? "" : "s"}
                     </p>
-                </div>
+                </div> */}
 
                 <BlogGrid blogs={blogs} />
             </main>

@@ -34,26 +34,26 @@ export function BlogCard({ blog }: BlogCardProps) {
                 <button
                     type="button"
                     className={cn(
-                        "group relative flex aspect-[16/8] w-full flex-col justify-end overflow-hidden",
-                        "rounded-sm border bg-background text-left shadow-xs",
+                        "group relative flex aspect-[20/8] w-full flex-col justify-end overflow-hidden",
+                        "rounded-sm border border-muted-foreground/20 bg-background text-left shadow-xs",
                         "transition-all duration-300 cursor-pointer p-5"
                     )}
                 >
                     <DotPattern
-                        width={20}
-                        height={20}
+                        width={15}
+                        height={15}
                         cx={1}
                         cy={1}
                         cr={1}
                         className={cn(
                             "text-muted-foreground/50",
-                            "[mask-image:linear-gradient(to_bottom,transparent_0%,black_30%,black_70%,transparent_100%)]"
+                            "[mask-image:linear-gradient(to_bottom,transparent_0%,black_2%,transparent_100%)]"
                         )}
                     />
-                    <span className="relative text-xl font-bold tracking-tight text-foreground sm:text-xl">
+                    <span className="relative text-xl font-bold tracking-tight text-foreground sm:text-sm">
                         {blog.title}
                     </span>
-                    <span className="relative mt-1 text-sm font-normal italic text-muted-foreground">
+                    <span className="relative mt-1 text-xs font-normal italic text-muted-foreground">
                         {blog.authorName}
                     </span>
                 </button>
@@ -92,10 +92,10 @@ export function BlogCard({ blog }: BlogCardProps) {
                     </DrawerHeader>
                     <div className="px-4 pb-6">
                         <h3 className="text-sm font-medium text-muted-foreground mb-2">
-                            Notes
+                            Notes (Highlights)
                         </h3>
                         {highlights.length > 0 ? (
-                            <ul className="space-y-2 list-disc list-inside text-sm text-foreground">
+                            <ul className="space-y-3 text-sm text-foreground list-none pl-0">
                                 {highlights.map((item, i) => (
                                     <li key={item._key ?? i}>
                                         <Highlighter
