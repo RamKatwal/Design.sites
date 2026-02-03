@@ -12,12 +12,16 @@ import { DotPattern } from "@/components/ui/dot-pattern"
 import { BlogItem } from "@/features/lib/getBlogs"
 import { cn } from "@/lib/utils"
 import { ArrowUpRight } from "lucide-react"
+import { useTheme } from "next-themes"
 
 type BlogCardProps = {
     blog: BlogItem
 }
 
 export function BlogCard({ blog }: BlogCardProps) {
+    const { resolvedTheme } = useTheme()
+    const highlightColor = resolvedTheme === "dark" ? "#4b5563" : "#87CEFA"
+
     const addedOnFormatted = blog.addedOn
         ? new Date(blog.addedOn).toLocaleDateString(undefined, {
               year: "numeric",
@@ -34,8 +38,8 @@ export function BlogCard({ blog }: BlogCardProps) {
                 <button
                     type="button"
                     className={cn(
-                        "group relative flex aspect-[20/8] w-full flex-col justify-end overflow-hidden",
-                        "rounded-sm border border-muted-foreground/20 bg-background text-left shadow-xs",
+                        "group relative flex aspect-[24/8] w-full flex-col justify-end overflow-hidden",
+                        "rounded-sm border border-muted-foreground/10 bg-background text-left hover:border-muted-foreground/40",
                         "transition-all duration-300 cursor-pointer p-5"
                     )}
                 >
@@ -46,11 +50,11 @@ export function BlogCard({ blog }: BlogCardProps) {
                         cy={1}
                         cr={1}
                         className={cn(
-                            "text-muted-foreground/50",
+                            "text-muted-foreground/20",
                             "[mask-image:linear-gradient(to_bottom,transparent_0%,black_2%,transparent_100%)]"
                         )}
                     />
-                    <span className="relative text-xl font-bold tracking-tight text-foreground sm:text-sm">
+                    <span className="relative min-w-0 truncate text-sm font-bold tracking-tight text-foreground sm:text-base">
                         {blog.title}
                     </span>
                     <span className="relative mt-1 text-xs font-normal italic text-muted-foreground">
@@ -100,7 +104,7 @@ export function BlogCard({ blog }: BlogCardProps) {
                                     <li key={item._key ?? i}>
                                         <Highlighter
                                             action="highlight"
-                                            color="#87CEFA"
+                                            color={highlightColor}
                                             isView={true}
                                         >
                                             {item.highlight}
